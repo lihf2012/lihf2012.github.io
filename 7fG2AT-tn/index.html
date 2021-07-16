@@ -1,0 +1,413 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>
+    实时同步数据库变更框架Debezium | 海市蜃楼的博客
+</title>
+<link rel="shortcut icon" href="https://lihf2012.github.io/favicon.ico?v=1626419700803">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
+<link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://lihf2012.github.io/styles/main.css">
+<!-- js -->
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://lihf2012.github.io/media/js/jquery.sticky-sidebar.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+        
+</head>
+
+<body>
+    <div class="main">
+        <div class="header">
+    <div class="nav">
+        <div class="logo">
+            <a href="https://lihf2012.github.io">
+                <img class="avatar" src="https://lihf2012.github.io/images/avatar.png?v=1626419700803" alt="">
+            </a>
+            <div class="site-title">
+                <h1>
+                    海市蜃楼的博客
+                </h1>
+            </div>
+        </div>
+        <span class="menu-btn fa fa-align-justify"></span>
+        <div class="menu-container">
+            <ul>
+                
+                    
+                            <li>
+                                <a href="/" class="menu">
+                                    首页
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/archives" class="menu">
+                                    归档
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/tags" class="menu">
+                                    标签
+                                </a>
+                            </li>
+                            
+                                
+                    
+                            <li>
+                                <a href="/post/about" class="menu">
+                                    关于
+                                </a>
+                            </li>
+                            
+                                
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".menu-btn").click(function() {
+            $(".menu-container").slideToggle();
+        });
+        $(window).resize(function() {
+
+            if (window.matchMedia('(min-width: 960px)').matches) {
+                $(".menu-container").css('display', 'block')
+            } else {
+                $(".menu-container").css('display', 'none')
+            }
+
+        });
+    });
+</script>
+
+            <div id="main-content" class="post-detail main-container">
+                <!-- left -->
+                <div id="content" class="main-container-left">
+                    <article class="post i-card">
+                        <h2 class="post-title">
+                            实时同步数据库变更框架Debezium
+                        </h2>
+                        <div class="post-info">
+                            <time class="post-time">2021-07-16</time>
+                            
+                                <a href="https://lihf2012.github.io/ivaEihiTb/" class="post-tag i-tag
+                            i-tag-">
+                            #数据库
+                        </a>
+                                
+                                <a href="https://lihf2012.github.io/1Ha_AQy9hG/" class="post-tag i-tag
+                            i-tag-success">
+                            #数据库中间件
+                        </a>
+                                
+                        </div>
+                        
+                                <div class="post-content">
+                                    <h2 id="实时同步数据库变更这个框架真是神器">实时同步数据库变更，这个框架真是神器！</h2>
+<figure data-type="image" tabindex="1"><img src="https://mmbiz.qpic.cn/sz_mmbiz_png/zuF5sJGRDCvT5oKEChOBxrSPT7EaPvg8DcM89b7fDiaIib3Tgp7BEvS0CQ3u2fe1vAhJhlvlfIq8h3ucQHsZkCicA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" loading="lazy"></figure>
+<p>我们数据库中的数据一直在变化，有时候我们希望能监听数据库数据的变化并根据变化做出一些反应，比如更新对应变化数据的缓存、增量同步到其它数据源、对数据进行检测和审计等等。而这种技术就叫<strong>变更数据捕获（Change Data Capture）</strong>。对于这种技术我们可能知道一个国内比较知名的框架<strong>Canal</strong>，非常好用！但是<strong>Canal</strong>有一个局限性就是只能用于<strong>Mysql</strong>的变更数据捕获。今天来介绍另一种更加强大的分布式CDC框架<strong>Debezium</strong>。</p>
+<h2 id="debezium">Debezium</h2>
+<p>提起<strong>Debezium</strong>这个框架，相信大多数普通开发者都比较陌生，但是提及它所属的公司大家一定不会陌生。</p>
+<p><img src="https://mmbiz.qpic.cn/sz_mmbiz_png/zuF5sJGRDCvT5oKEChOBxrSPT7EaPvg8FqRrU8WmHLFZgnspNS7CY0fRSAicKzXgb18IcyA41y9lxLmLwAvDp8g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" loading="lazy">红帽公司</p>
+<p>没错就是开源界最成功的<strong>红帽公司</strong>。<strong>Debezium</strong>是为捕获数据更改的流式处理框架，开源免费。<strong>Debezium</strong>近乎实时地监控数据库行级别(row-level)的数据变更，并针对变更可以做出反应。而且只有已提交的变更才是可见的，所以不用担心事务问题或者更改被回滚的问题。<strong>Debezium</strong>为所有的数据库更改事件提供了一个统一的模型，所以不用担心每种数据库系统的复杂性。<strong>Debezium</strong>提供了对<strong>MongoDB</strong>、<strong>MySQL</strong>、<strong>PostgreSQL</strong>、<strong>SQL Server</strong>、<strong>Oracle</strong>、<strong>DB2</strong>等数据库的支持。</p>
+<p>另外借助于<strong>Kafka Connector</strong>可以开发出一个基于事件流的变更捕获平台，具有高容错率和极强的扩展性。</p>
+<p><img src="https://mmbiz.qpic.cn/sz_mmbiz_png/zuF5sJGRDCvT5oKEChOBxrSPT7EaPvg82icKQBzYgOWSeibl49d9YHPEFZh5KicicKK8HIpTBbtUJOvZSGhJVQicJvg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" loading="lazy">Debezium Kafka 架构</p>
+<p>如图所示，部署了用于 MySQL 和 PostgresSQL 的 Debezium Kafka连接器以捕获对这两种类型数据库的更改事件，然后将这些更改通过下游的Kafka Connector将记录传输到其他系统或者数据库（例如 <strong>Elasticsearch</strong>、数据仓库、分析系统）或缓存。</p>
+<p>另一种玩法就是将<strong>Debezium</strong>内置到应用程序中，来做一个类似消息总线的设施，将数据变更事件传递给订阅的下游系统中。</p>
+<p><img src="https://mmbiz.qpic.cn/sz_mmbiz_png/zuF5sJGRDCvT5oKEChOBxrSPT7EaPvg8QCVF7ic1gWHqHl0PJeqibdwULMHDppa48dUWdNicIFJs8RZh7paw4MleQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片" loading="lazy">Debezium内置服务器架构</p>
+<p><strong>Debezium</strong>对数据的完整性和可用性也是做了不少的工作。<strong>Debezium</strong>用持久化的、有副本备份的日志来记录数据库数据变化的历史，因此，你的应用可以随时停止再重启，而不会错过它停止运行时发生的事件，保证了所有的事件都能被正确地、完全地处理掉。</p>
+<blockquote>
+<p>❝</p>
+<p>稍后我会演示一个<strong>Spring Boot</strong>集成<strong>Debezium</strong>的数据捕获系统。</p>
+</blockquote>
+<h2 id="spring-boot集成debezium">Spring Boot集成Debezium</h2>
+<p>理论介绍并不能让你直观感受到<strong>Debezium</strong>的能力，所以接下来我将使用<strong>嵌入式Debezium引擎</strong>来演示一下。</p>
+<p><img src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" alt="图片" loading="lazy">流程图</p>
+<p>如上图所示，当我们变更MySQL数据库中的某行数据时，通过<strong>Debezium</strong>实时监听到<strong>binlog</strong>日志的变化触发捕获变更事件，然后获取到变更事件模型，并做出响应（消费）。接下来我们来搭建环境。</p>
+<h3 id="mysql开启binlog日志">MySQL开启binlog日志</h3>
+<p>为了方便这里使用MySQL的Docker容器，对应的脚本为：</p>
+<pre><code># 运行mysql容器 
+docker run --name mysql-service -v d:/mysql/data:/var/lib/mysql -p 3306:3306 -e TZ=Asia/Shanghai -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time_zone=&quot;+8:00&quot;
+# 设置binlog位置
+docker exec mysql-service bash -c &quot;echo 'log-bin=/var/lib/mysql/mysql-bin' &gt;&gt; /etc/mysql/mysql.conf.d/mysqld.cnf&quot;
+# 配置 mysql的server-id
+docker exec mysql-service bash -c &quot;echo 'server-id=123454' &gt;&gt; /etc/mysql/mysql.conf.d/mysqld.cnf&quot;
+</code></pre>
+<p>上面的脚本运行了一个用户名为<code>root</code>、密码为<code>123456</code>并且将数据挂载到本地路径<code>d:/mysql/data</code>的MySQL容器，同时开启了<strong>binlog</strong>日志，并设置<code>server-id</code>为<code>123454</code>，这些信息后面配置会用。</p>
+<blockquote>
+<p>❝</p>
+<p>请注意如果不使用<code>root</code>用户的话，需要保证用户具有<code>SELECT</code>, <code>RELOAD</code>, <code>SHOW DATABASES</code>, <code>REPLICATION SLAVE</code>, <code>REPLICATION CLIENT</code>五种权限。</p>
+</blockquote>
+<h3 id="spring-boot集成嵌入式debezium">Spring Boot集成嵌入式Debezium</h3>
+<h3 id="debezium依赖">Debezium依赖</h3>
+<p><strong>Spring Boot</strong>的应用中加入下列依赖：</p>
+<pre><code>    &lt;dependency&gt;
+        &lt;groupId&gt;io.debezium&lt;/groupId&gt;
+        &lt;artifactId&gt;debezium-api&lt;/artifactId&gt;
+        &lt;version&gt;${debezium.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.debezium&lt;/groupId&gt;
+        &lt;artifactId&gt;debezium-embedded&lt;/artifactId&gt;
+        &lt;version&gt;${debezium.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.debezium&lt;/groupId&gt;
+        &lt;artifactId&gt;debezium-connector-mysql&lt;/artifactId&gt;
+        &lt;version&gt;${debezium.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+</code></pre>
+<blockquote>
+<p>❝</p>
+<p>目前最新的版本号为<strong>1.5.2.Final</strong>。</p>
+</blockquote>
+<h3 id="声明配置">声明配置</h3>
+<p>然后声明需要的配置：</p>
+<pre><code>/**
+     * Debezium 配置.
+     *
+     * @return configuration
+     */
+    @Bean
+    io.debezium.config.Configuration debeziumConfig() {
+        return io.debezium.config.Configuration.create()
+//            连接器的Java类名称
+                .with(&quot;connector.class&quot;, MySqlConnector.class.getName())
+//            偏移量持久化，用来容错 默认值
+                .with(&quot;offset.storage&quot;, &quot;org.apache.kafka.connect.storage.FileOffsetBackingStore&quot;)
+//                偏移量持久化文件路径 默认/tmp/offsets.dat  如果路径配置不正确可能导致无法存储偏移量 可能会导致重复消费变更
+//                如果连接器重新启动，它将使用最后记录的偏移量来知道它应该恢复读取源信息中的哪个位置。
+                .with(&quot;offset.storage.file.filename&quot;, &quot;C:/Users/n1/IdeaProjects/spring-boot-debezium/tmp/offsets.dat&quot;)
+//                捕获偏移量的周期
+                .with(&quot;offset.flush.interval.ms&quot;, &quot;6000&quot;)
+//               连接器的唯一名称
+                .with(&quot;name&quot;, &quot;mysql-connector&quot;)
+//                数据库的hostname
+                .with(&quot;database.hostname&quot;, &quot;localhost&quot;)
+//                端口
+                .with(&quot;database.port&quot;, &quot;3306&quot;)
+//                用户名
+                .with(&quot;database.user&quot;, &quot;root&quot;)
+//                密码
+                .with(&quot;database.password&quot;, &quot;123456&quot;)
+//                 包含的数据库列表
+                .with(&quot;database.include.list&quot;, &quot;etl&quot;)
+//                是否包含数据库表结构层面的变更，建议使用默认值true
+                .with(&quot;include.schema.changes&quot;, &quot;false&quot;)
+//                mysql.cnf 配置的 server-id
+                .with(&quot;database.server.id&quot;, &quot;123454&quot;)
+//                 MySQL 服务器或集群的逻辑名称
+                .with(&quot;database.server.name&quot;, &quot;customer-mysql-db-server&quot;)
+//                历史变更记录
+                .with(&quot;database.history&quot;, &quot;io.debezium.relational.history.FileDatabaseHistory&quot;)
+//                历史变更记录存储位置 
+                .with(&quot;database.history.file.filename&quot;, &quot;C:/Users/n1/IdeaProjects/spring-boot-debezium/tmp/dbhistory.dat&quot;)
+                .build();
+    }
+</code></pre>
+<p>配置分为两部分：</p>
+<ul>
+<li>一部分是<strong>Debezium Engine</strong>的配置属性，参见<strong>Debezium Engine配置</strong>[1]。</li>
+<li>一部分是<strong>Mysql Connector</strong>的配置属性，参见<strong>Mysql Connector配置</strong>[2]。</li>
+</ul>
+<h3 id="实例化debezium-engine">实例化Debezium Engine</h3>
+<p>应用程序需要为运行的<strong>Mysql Connector</strong>启动一个<strong>Debezium</strong>引擎，这个引擎会以异步线程的形式运行，它包装了整个<strong>Mysql Connector</strong>连接器的生命周期。声明一个引擎需要以下几步：</p>
+<ul>
+<li>声明收到数据变更捕获信息的格式，提供了<code>JSON</code>、<code>Avro</code>、<code>Protobuf</code>、<code>Connect</code>、<code>CloudEvents</code>等格式。</li>
+<li>加载上面定义的配置。</li>
+<li>声明消费数据更改事件的函数方法。</li>
+</ul>
+<p>声明的伪代码：</p>
+<pre><code>DebeziumEngine&lt;RecordChangeEvent&lt;SourceRecord&gt;&gt; debeziumEngine = DebeziumEngine.create(ChangeEventFormat.of(Connect.class))
+        .using(configuration.asProperties())
+        .notifying(this::handlePayload)
+        .build();
+</code></pre>
+<p><code>handlePayload</code>方法为：</p>
+<pre><code>private void handlePayload(List&lt;RecordChangeEvent&lt;SourceRecord&gt;&gt; recordChangeEvents, DebeziumEngine.RecordCommitter&lt;RecordChangeEvent&lt;SourceRecord&gt;&gt; recordCommitter) {
+    recordChangeEvents.forEach(r -&gt; {
+        SourceRecord sourceRecord = r.record();
+        Struct sourceRecordChangeValue = (Struct) sourceRecord.value();
+
+        if (sourceRecordChangeValue != null) {
+            // 判断操作的类型 过滤掉读 只处理增删改   这个其实可以在配置中设置
+            Envelope.Operation operation = Envelope.Operation.forCode((String) sourceRecordChangeValue.get(OPERATION));
+
+            if (operation != Envelope.Operation.READ) {
+                String record = operation == Envelope.Operation.DELETE ? BEFORE : AFTER;
+                // 获取增删改对应的结构体数据
+                Struct struct = (Struct) sourceRecordChangeValue.get(record);
+                // 将变更的行封装为Map
+                Map&lt;String, Object&gt; payload = struct.schema().fields().stream()
+                        .map(Field::name)
+                        .filter(fieldName -&gt; struct.get(fieldName) != null)
+                        .map(fieldName -&gt; Pair.of(fieldName, struct.get(fieldName)))
+                        .collect(toMap(Pair::getKey, Pair::getValue));
+                // 这里简单打印一下
+                System.out.println(&quot;payload = &quot; + payload);
+            }
+        }
+    });
+}
+</code></pre>
+<p>引擎的启动和关闭正好契合Spring Bean的生命周期：</p>
+<pre><code>@Data
+public class DebeziumServerBootstrap implements InitializingBean, SmartLifecycle {
+
+    private final Executor executor = Executors.newSingleThreadExecutor();
+    private DebeziumEngine&lt;?&gt; debeziumEngine;
+
+    @Override
+    public void start() {
+        executor.execute(debeziumEngine);
+    }
+
+    @SneakyThrows
+    @Override
+    public void stop() {
+        debeziumEngine.close();
+    }
+
+    @Override
+    public boolean isRunning() {
+        return false;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(debeziumEngine, &quot;debeziumEngine must not be null&quot;);
+    }
+}
+</code></pre>
+<h2 id="启动">启动</h2>
+<p>启动该Spring Boot项目，你可以采用各种手段往数据库增删改数据，观察会有类似下面的打印：</p>
+<pre><code>payload = {user_id=1123213, username=felord.cn, age=11 , gender=0, enabled=1}
+</code></pre>
+<p>说明<strong>Debezium</strong>监听到了数据库的变更。你可以想想这种技术在哪些场景有用武之地。好了今天的分享就到这里，感谢大家的支持！原创不易，请多多关注、点赞、转发、再看。</p>
+<blockquote>
+<p>❝</p>
+<p>项目源码地址：https://gitee.com/felord/spring-boot-debezium</p>
+</blockquote>
+<h3 id="参考资料">参考资料</h3>
+<p>[1]Debezium Engine配置: https://debezium.io/documentation/reference/1.5/development/engine.html#engine-properties[2]Mysql Connector配置: https://debezium.io/documentation/reference/1.5/connectors/mysql.html#mysql-connector-properties</p>
+
+                                </div>
+                    </article>
+                    <!--  -->
+                    
+                        <div class="next-post">
+                            <div class="next">下一篇</div>
+                            <a href="https://lihf2012.github.io/mybatis-plus/">
+                                <h3 class="post-title">
+                                    熟练掌握 MyBatis-Plus，一篇就够！
+                                </h3>
+                            </a>
+                        </div>
+                        
+                            <div id="disqus_thread"></div>
+                            <div id="gitalk-container"></div>
+                </div>
+                <!-- middle -->
+                <div class="main-container-middle"></div>
+                <!-- right -->
+                <div id="sidebar" class="main-container-right">
+                    
+                        <!-- toc -->
+                        
+    <div class="toc-card i-card ">
+        <div class="toc-title i-card-title">目录</div>
+        <div class="toc-content">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%98%E6%9B%B4%E8%BF%99%E4%B8%AA%E6%A1%86%E6%9E%B6%E7%9C%9F%E6%98%AF%E7%A5%9E%E5%99%A8">实时同步数据库变更，这个框架真是神器！</a></li>
+<li><a href="#debezium">Debezium</a></li>
+<li><a href="#spring-boot%E9%9B%86%E6%88%90debezium">Spring Boot集成Debezium</a>
+<ul>
+<li><a href="#mysql%E5%BC%80%E5%90%AFbinlog%E6%97%A5%E5%BF%97">MySQL开启binlog日志</a></li>
+<li><a href="#spring-boot%E9%9B%86%E6%88%90%E5%B5%8C%E5%85%A5%E5%BC%8Fdebezium">Spring Boot集成嵌入式Debezium</a></li>
+<li><a href="#debezium%E4%BE%9D%E8%B5%96">Debezium依赖</a></li>
+<li><a href="#%E5%A3%B0%E6%98%8E%E9%85%8D%E7%BD%AE">声明配置</a></li>
+<li><a href="#%E5%AE%9E%E4%BE%8B%E5%8C%96debezium-engine">实例化Debezium Engine</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%AF%E5%8A%A8">启动</a>
+<ul>
+<li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+        <script>
+            function locateCatelogList() {
+                /*获取文章目录集合,可通过:header过滤器*/
+                var alis = $('.post-content :header');
+                /*获取侧边栏目录列表集合**/
+                var sidebar_alis = $('.markdownIt-TOC a');
+                /*获取滚动条到顶部的距离*/
+                var scroll_height = $(window).scrollTop();
+                for (var i = 0; i < alis.length; i++) {
+                    /*获取锚点集合中的元素分别到顶点的距离*/
+                    var a_height = $(alis[i]).offset().top;
+                    if (a_height < scroll_height) {
+                        /*高亮显示*/
+                        sidebar_alis.removeClass('on');
+                        $(sidebar_alis[i]).addClass('on');
+                    }
+                }
+            }
+            $(function() {
+                /*绑定滚动事件 */
+                $(window).bind('scroll', locateCatelogList);
+            });
+        </script>
+    </div>
+    
+                            
+
+                </div>
+
+
+
+
+            </div>
+
+
+            <div class="site-footer">
+  Powered by <a href="https://www.lihaifei.cn" target="_blank">lihaifei</a> | 
+  <a class="rss" href="https://lihf2012.github.io/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+
+    </div>
+    <script>
+        $('#sidebar').stickySidebar({
+            topSpacing: 80,
+            // bottomSpacing: 60
+        });
+    </script>
+    
+</body>
+
+</html>
