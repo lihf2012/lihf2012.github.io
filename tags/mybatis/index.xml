@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mybatis on Even - A super concise theme for Hugo</title>
+    <link>https://www.lihaifei.cn/tags/mybatis/</link>
+    <description>Recent content in mybatis on Even - A super concise theme for Hugo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 23 Mar 2022 11:10:41 +0800</lastBuildDate><atom:link href="https://www.lihaifei.cn/tags/mybatis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>mybatis plus 看这篇就够了</title>
+      <link>https://www.lihaifei.cn/post/test2/</link>
+      <pubDate>Wed, 23 Mar 2022 11:10:41 +0800</pubDate>
+      
+      <guid>https://www.lihaifei.cn/post/test2/</guid>
+      <description>mybatis-plus是一款Mybatis增强工具，用于简化开发，提高效率。下文使用缩写mp来简化表示mybatis-plus，本文主要介</description>
+    </item>
+    
+  </channel>
+</rss>
