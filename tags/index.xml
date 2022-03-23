@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Even - A super concise theme for Hugo</title>
+    <title>Tags on 海市蜃楼的博客</title>
     <link>https://www.lihaifei.cn/tags/</link>
-    <description>Recent content in Tags on Even - A super concise theme for Hugo</description>
+    <description>Recent content in Tags on 海市蜃楼的博客</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>zh-cn</language>
+    <copyright>lihaifei</copyright>
     <lastBuildDate>Wed, 23 Mar 2022 11:10:41 +0800</lastBuildDate><atom:link href="https://www.lihaifei.cn/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>mybatis</title>

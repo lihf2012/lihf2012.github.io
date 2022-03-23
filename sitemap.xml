@@ -2,13 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.lihaifei.cn/</loc>
-    <lastmod>2022-03-23T11:10:41+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
     <loc>https://www.lihaifei.cn/tags/mybatis/</loc>
     <lastmod>2022-03-23T11:10:41+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -38,6 +31,13 @@
   
   <url>
     <loc>https://www.lihaifei.cn/tags/</loc>
+    <lastmod>2022-03-23T11:10:41+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.lihaifei.cn/</loc>
     <lastmod>2022-03-23T11:10:41+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
